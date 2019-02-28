@@ -14,13 +14,12 @@ app.use(cors(corsOptions))
 const db = require('./app/config/db.config.js');
 
 // force: true will drop the table if it already exists
-db.sequelize.sync({ force: true }).then(() => {
-  console.log('Drop and Resync with { force: true }');
-  initialBooks();
-});
+db.sequelize.sync();//.then(() => {
+console.log('Drop and Resync with { force: true }');
+//initialBooks();
+//});
 
-require('./app/route/book.route.js')(app);
-require('./app/route/borrower.route.js')(app);
+require('./app/route/main.route.js')(app);
 
 // Create a Server
 var server = app.listen(8080, function () {
@@ -35,18 +34,20 @@ function initialBooks() {
 
   let books = [
     {
-      title: "Joe",
+      title: "Sherlock",
       isbn: "1234567"
     },
     {
-      title: "Chandler",
+      title: "Scarlett rose",
       isbn: "222333"
     },
     {
-      title: "Rachel",
+      title: "451' F",
       isbn: "442233"
     }
   ]
+
+  let authors = [{ name: "Arthur Conan Doyle" }, { name: "Assistant" }];
 
   // Init data -> save to MySQL
   const Book = db.books;
