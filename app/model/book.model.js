@@ -1,18 +1,20 @@
 module.exports = (sequelize, Sequelize) => {
 	const Book = sequelize.define('book', {
-	  title: {
+		title: {
 			type: Sequelize.STRING
-	  },
-	  isbn: {
-			type: Sequelize.STRING
-	  },
-	  authors: {
-		  type: Sequelize.STRING
 		},
-		available:{
-			type: Sequelize.BOOLEAN
+		isbn: {
+			type: Sequelize.STRING(10),
+			primaryKey: true
 		}
-	});
-	
+	},
+		{
+			timestamps: false,
+			underscored: true,
+			freezeTableName: true,
+			tableName: 'book'
+		}
+	);
+
 	return Book;
 }
