@@ -9,12 +9,12 @@ exports.findAllBooks = (req, res) => {
     console.log("search in back..=" + req.params.search);
     var search = req.params.search ? req.params.search : "";
 
-    db.sequelize.query(
-        //["SELECT isbn, title,\"\",true FROM BOOK WHERE title like '%", req.params.search, "%'"].join(""),
+    db.sequelize.query(        
         "select BOOK.isbn, title, authors FROM BOOK, " +
         "(SELECT isbn, string_agg(name, ', ' ORDER BY name) as authors FROM AUTHOR " +
         "JOIN BOOK_AUTHOR ON AUTHOR.author_id=BOOK_AUTHOR.author_id GROUP  BY isbn) as B_AUTHORS " +
-        "WHERE BOOK.isbn=B_AUTHORS.isbn and (title like ('%" + search + "%') OR authors like ('%" + search + "%'))",
+        "WHERE BOOK.isbn=B_AUTHORS.isbn and (title like ('%" + search + "%') OR authors like ('%" + search + "%'))"
+        + " LIMIT " + req.params.pagesize + " OFFSET " + req.params.offset,
         {
             raw: true,
             // replacements: {
