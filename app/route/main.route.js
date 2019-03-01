@@ -2,7 +2,7 @@ module.exports = function (app) {
     const main = require('../controller/main.controller.js');
 
     // Retrieve all Customer
-    app.get('/api/books', main.findAllBooks);
+    app.get('/api/books/:search/:offset/:pagesize', main.findAllBooks);
 
 
     // Create a new borrower

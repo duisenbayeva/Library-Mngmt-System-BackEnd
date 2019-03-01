@@ -6,15 +6,41 @@ const Borrower = db.borrowers;
 // FETCH All Books
 exports.findAllBooks = (req, res) => {
 
-    Books.findAndCountAll({
-        offset: 0,
-        limit: 3
-    })
+    // Books.findAndCountAll({
+    //     offset: 0,
+    //     limit: 3
+    // })
+    //     .then(books => {
+    //         console.log(books.count);
+    //         console.log(books.rows);
+    //         res.json(books.rows);
+    //     }).catch(err => {
+    //         console.log(err);
+    //         res.status(500).json({ msg: "error", details: err });
+    //     });
+
+    console.log("search in back..=" + req.params.search);
+
+    db.sequelize.query(
+        //["SELECT isbn, title,\"\",true FROM BOOK WHERE title like '%", req.params.search, "%'"].join(""),
+        "select BOOK.isbn, title, authors FROM BOOK, " +
+        "(SELECT isbn, string_agg(name, ', ' ORDER BY name) as authors FROM AUTHOR " +
+        "JOIN BOOK_AUTHOR ON AUTHOR.author_id=BOOK_AUTHOR.author_id GROUP  BY isbn) as B_AUTHORS " +
+        "WHERE BOOK.isbn=B_AUTHORS.isbn",
+        {
+            raw: true,
+            // replacements: {
+            //     search: req.params.search, pageSize: req.params.pageSize,
+            //     offset: req.params.offset
+            // }, 
+            type: db.sequelize.QueryTypes.SELECT
+        }
+    )
         .then(books => {
-            console.log(books.count);
-            console.log(books.rows);
-            res.json(books.rows);
-        }).catch(err => {
+            console.log(books);
+            res.json({ items: books, total_count: books.length });
+        })
+        .catch(err => {
             console.log(err);
             res.status(500).json({ msg: "error", details: err });
         });
