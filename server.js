@@ -14,8 +14,8 @@ app.use(cors(corsOptions))
 const db = require('./app/config/db.config.js');
 
 // force: true will drop the table if it already exists
-db.sequelize.sync();//.then(() => {
-console.log('Drop and Resync with { force: true }');
+db.sequelize.sync()//.then(() => {
+//console.log('Drop and Resync with { force: true }');
 //initialBooks();
 //});
 
@@ -30,28 +30,36 @@ var server = app.listen(8080, function () {
   console.log("App listening at http://%s:%s", host, port);
 })
 
+
 function initialBooks() {
 
-  let books = [
-    {
-      title: "Sherlock",
-      isbn: "1234567"
-    },
-    {
-      title: "Scarlett rose",
-      isbn: "222333"
-    },
-    {
-      title: "451' F",
-      isbn: "442233"
-    }
-  ]
+  // const csvFilePath = '../Documents/DB/books.csv'
+  // const csv = require('csvtojson')
 
-  let authors = [{ name: "Arthur Conan Doyle" }, { name: "Assistant" }];
+  // var request = require('request');
+  // csv()
+  //   .fromFile(csvFilePath)
+  //   .then((jsonObj) => {
+  //     console.log(jsonObj);
+  //     /**
+  //      * [
+  //      * 	{a:"1", b:"2", c:"3"},
+  //      * 	{a:"4", b:"5". c:"6"}
+  //      * ]
+  //      */
+  //   })
 
-  // Init data -> save to MySQL
-  const Book = db.books;
-  for (let i = 0; i < books.length; i++) {
-    Book.create(books[i]);
-  }
+  // Async / await usage
+  //const jsonArray = csv().fromFile(csvFilePath);
+
+  // Init data -> save to Postgres
+  // setTimeout(new function () {
+  //   const Book = db.books;
+  //   for (let i = 0; i < 5; i++) {
+  //     //Book.create(books[i]);
+  //     console.log(jsonArray[i].Title, jsonArray[i].ISBN10, jsonArray[i].field7)
+  //   }
+  // }
+  //   , 6000);
 }
+
