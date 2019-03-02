@@ -1,6 +1,7 @@
 const db = require('../config/db.config.js');
 const Books = db.books;
 const Borrower = db.borrowers;
+const BookLoan = db.book_loan;
 
 
 // FETCH All Books
@@ -19,7 +20,7 @@ exports.findAllBooks = (req, res) => {
         }
     )
         .then(books => {
-            console.log(books);
+
             res.json({ items: books, total_count: books.length });
         })
         .catch(err => {
@@ -33,8 +34,8 @@ exports.findAllBooks = (req, res) => {
 exports.createBorrower = (req, res) => {
     // Save to PostgreSQL database
     Borrower.create({
-        "fname": req.body.firstname,
-        "lname": req.body.lastname,
+        "fname": req.body.fname,
+        "lname": req.body.lname,
         "ssn": req.body.ssn,
         "phone": req.body.phone,
         "address": req.body.address,
@@ -43,7 +44,25 @@ exports.createBorrower = (req, res) => {
         "email": req.body.email
     }).then(borrower => {
         // Send created borrower to client
-        res.json(borrower);
+        res.json({ borrower: borrower, message: "Successfully was created" });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({ msg: "error", details: err });
+    });
+};
+
+// Post a Borrower
+exports.createLoan = (req, res) => {
+    // Save to PostgreSQL database
+    console.log("creating..", req.body);
+    BookLoan.create({
+        "isbn": req.body.book.isbn,
+        "card_id": req.body.borrower.card_id,
+        "date_out": new Date(Date.now()),
+        "due_date": new Date(Date.now() + 12096e5)
+    }).then(BookLoan => {
+        // Send created borrower to client
+        res.json({ bookloan: BookLoan, message: "Successfully created" });
     }).catch(err => {
         console.log(err);
         res.status(500).json({ msg: "error", details: err });
@@ -63,7 +82,6 @@ exports.findAllBorrowers = (req, res) => {
         }
     )
         .then(borrowers => {
-            console.log(borrowers);
             res.json({ items: borrowers, total_count: borrowers.length });
         })
         .catch(err => {

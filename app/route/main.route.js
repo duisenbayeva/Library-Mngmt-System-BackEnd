@@ -10,6 +10,8 @@ module.exports = function (app) {
     // Create a new borrower
     app.post('/api/borrowers', main.createBorrower);
 
+    app.post('/api/newloan', main.createLoan);
+
     // Retrieve all Books
     app.get('/api/borrowers/:offset/:pagesize/:search', main.findAllBorrowers);
 

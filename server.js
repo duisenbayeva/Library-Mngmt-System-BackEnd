@@ -14,10 +14,11 @@ app.use(cors(corsOptions))
 const db = require('./app/config/db.config.js');
 
 // force: true will drop the table if it already exists
-db.sequelize.sync()//.then(() => {
-//console.log('Drop and Resync with { force: true }');
-//initialBooks();
-//});
+db.sequelize.sync().then(() => {
+  //console.log('Drop and Resync with { force: true }');
+  //initialBooks();
+  //db.sequelize.query("ALTER SEQUENCE borrower_card_id_seq RESTART WITH 1001;");
+});
 
 require('./app/route/main.route.js')(app);
 
