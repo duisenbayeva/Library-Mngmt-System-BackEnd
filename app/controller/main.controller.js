@@ -5,11 +5,9 @@ const Borrower = db.borrowers;
 
 // FETCH All Books
 exports.findAllBooks = (req, res) => {
-
-    console.log("search in back..=" + req.params.search);
     var search = req.params.search ? req.params.search : "";
 
-    db.sequelize.query(        
+    db.sequelize.query(
         "select BOOK.isbn, title, authors FROM BOOK, " +
         "(SELECT isbn, string_agg(name, ', ' ORDER BY name) as authors FROM AUTHOR " +
         "JOIN BOOK_AUTHOR ON AUTHOR.author_id=BOOK_AUTHOR.author_id GROUP  BY isbn) as B_AUTHORS " +
@@ -17,10 +15,6 @@ exports.findAllBooks = (req, res) => {
         + " LIMIT " + req.params.pagesize + " OFFSET " + req.params.offset,
         {
             raw: true,
-            // replacements: {
-            //     search: req.params.search, pageSize: req.params.pageSize,
-            //     offset: req.params.offset
-            // }, 
             type: db.sequelize.QueryTypes.SELECT
         }
     )
@@ -32,7 +26,6 @@ exports.findAllBooks = (req, res) => {
             console.log(err);
             res.status(500).json({ msg: "error", details: err });
         });
-
 };
 
 
@@ -59,13 +52,24 @@ exports.createBorrower = (req, res) => {
 
 // FETCH All Borrowers
 exports.findAllBorrowers = (req, res) => {
-    Borrower.findAll().then(borrowers => {
-        // Send All Borrowers to Client
-        res.json(borrowers.sort(function (b1, b2) { return b1.card_id - b2.card_id }));
-    }).catch(err => {
-        console.log(err);
-        res.status(500).json({ msg: "error", details: err });
-    });
+    var search = req.params.search ? req.params.search : "";
+
+    db.sequelize.query(
+        "select * FROM BORROWER " +
+        "WHERE ssn like ('%" + search + "%') LIMIT " + req.params.pagesize + " OFFSET " + req.params.offset,
+        {
+            raw: true,
+            type: db.sequelize.QueryTypes.SELECT
+        }
+    )
+        .then(borrowers => {
+            console.log(borrowers);
+            res.json({ items: borrowers, total_count: borrowers.length });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ msg: "error", details: err });
+        });
 };
 
 // Find a Borrower by Id

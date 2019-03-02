@@ -1,17 +1,20 @@
 module.exports = function (app) {
     const main = require('../controller/main.controller.js');
 
-    // Retrieve all Customer
+    // Retrieve all Books
     app.get('/api/books/:offset/:pagesize/:search', main.findAllBooks);
 
-    // Retrieve all Customer
+    // Retrieve all Books
     app.get('/api/books/:offset/:pagesize', main.findAllBooks);
 
     // Create a new borrower
     app.post('/api/borrowers', main.createBorrower);
 
-    // Retrieve all borrower
-    app.get('/api/borrowers', main.findAllBorrowers);
+    // Retrieve all Books
+    app.get('/api/borrowers/:offset/:pagesize/:search', main.findAllBorrowers);
+
+    // Retrieve all Books
+    app.get('/api/borrowers/:offset/:pagesize', main.findAllBorrowers);
 
     // Retrieve a single borrower by Id
     app.get('/api/borrowers/:id', main.findBorrowerById);
