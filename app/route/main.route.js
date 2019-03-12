@@ -21,6 +21,12 @@ module.exports = function (app) {
     // Retrieve a single borrower by Id
     app.get('/api/borrowers/:id', main.findBorrowerById);
 
+    // Retrieve all Books
+    app.get('/api/loans/:offset/:pagesize', main.findAllLoans);
+
+    // Retrieve a single borrower by Id
+    //app.get('/api/loans/:id', main.findLoansByBorrower);
+
     // Update a borrower with Id
     //    app.put('/api/borrowers', main.update);
 

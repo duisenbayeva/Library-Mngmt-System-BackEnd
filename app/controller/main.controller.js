@@ -99,3 +99,26 @@ exports.findBorrowerById = (req, res) => {
         res.status(500).json({ msg: "error", details: err });
     });
 };
+
+// FETCH All Borrowers
+exports.findAllLoans = (req, res) => {
+    var search = req.params.search ? req.params.search : "";
+
+    db.sequelize.query(
+        "select book.isbn as isbn, title as book, borrower.card_id as card_id, concat(fname,' ',lname) as borrower, " +
+        "book_loan.loan_id as loan_id, date_out, due_date, date_in, fine_amt as fine, paid" +
+        " from book_loan, borrower, book, fine where borrower.card_id=book_loan.card_id " +
+        "and book.isbn=book_loan.isbn and book_loan.loan_id=fine.loan_id",
+        {
+            raw: true,
+            type: db.sequelize.QueryTypes.SELECT
+        }
+    )
+        .then(loans => {
+            res.json({ items: loans, total_count: loans.length });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ msg: "error", details: err });
+        });
+};
