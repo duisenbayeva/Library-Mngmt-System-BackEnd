@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-express-sequelizejs-postgresql",
+  "name": "lms-server",
   "version": "1.0.0",
   "description": "nodejs-express-sequelizejs-postgresql",
   "main": "server.js",
